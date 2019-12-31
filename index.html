@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Add a vector tile source</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.js'></script>
+
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibGVvcG9sZC0yMDE5IiwiYSI6ImNrM3lpN2p3azFrankzZG56N25kN2Z2ZW4ifQ.ul_9S9KTum814-9jh_I0vA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+             style: 'mapbox://styles/leopold-2019/ck40s5fup0hpx1cmkrrxsqhim', //'mapbox://styles/mapbox/dark-zh-v1',
+            //mapbox://styles/leopold-2019/ck40s5fup0hpx1cmkrrxsqhim
+             zoom: 12,
+             center: [82.293590 , 44.022301]
+        });
+
+        map.on('load', function () {
+
+            /*map.addLayer({
+           'id': 'park-boundary',
+           'type': 'fill',
+           'source': 'someid',
+           'paint': {
+               'fill-color': '#888888',
+               'fill-opacity': 0.4
+           },
+           'filter': ['==', '$type', 'Polygon']
+       });*/
+
+            map.addLayer({
+                "id": "terrain-data",
+                "type": "line",
+                "source": {
+                    type: 'vector',
+                    tiles: ['http://localhost:53879/tiless.ashx?m=getVectorTile&z={z}&x={x}&y={y}'],
+                    minzoom: 1,
+                    maxzoom: 20
+                },
+                "source-layer": "lines",
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color':
+                        ['match', ['get', 'name'], 'A', '#DB0B00', 'B', '#FE9003', 'C', '#FCFC82', 'D', '#59EB04', 'E', '#595CCF', '#FFF5EE'],
+                    'line-width': 10,
+                  //  'fill-color': '#888888',
+                    //'fill-opacity': 0.4
+                }
+               
+               // 'filter': ['==', '$type', 'lines']
+            }); 
+            var popup = new mapboxgl.Popup({
+                closeButton: false
+            });
+            map.on('click', 'terrain-data', function (e) {
+               
+                map.getCanvas().style.cursor = 'pointer';
+                var feature = e.features[0];
+                console.log(e.lngLat);
+                popup
+                .setLngLat(e.lngLat)
+               .setText(
+                feature.properties.name +
+                ' (' +
+                 feature.properties.name +
+                ')'
+                 )
+               .addTo(map);
+
+                console.log(feature);
+
+            });
+
+        });
+
+
+    </script>
+
+</body>
+</html>

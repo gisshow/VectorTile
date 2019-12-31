@@ -1,0 +1,103 @@
+﻿ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Add multiple geometries from one GeoJSON source</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        ;
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibGVvcG9sZC0yMDE5IiwiYSI6ImNrM3lpN2p3azFrankzZG56N25kN2Z2ZW4ifQ.ul_9S9KTum814-9jh_I0vA';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/outdoors-v11',
+        center: [87.610092, 43.9384048],
+        zoom: 10
+    });
+
+    map.on('load', function() {
+    
+
+      /*  map.addSource('someid', {
+            type: 'geojson',
+            data: 'http://localhost:820/geo/kk/Vectors/Vectors/10/762/372.json'
+        });*/
+
+
+        map.addSource('someid', {
+            "type": "vector",
+            'tiles': [
+                
+                'https://a.tiles.mapbox.com/v4/brulec.bwb1kp3d/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiYnJ1bGVjIiwiYSI6IlpEOGRJVkUifQ.SDYry6LIIHfMMpajIkFCAg'
+                 
+            ],
+        });
+
+
+       /*https://a.tiles.mapbox.com/v4/brulec.bwb1kp3d/{z}/{x}/{y}.vector.pbf?access_token=pk.eyJ1IjoiYnJ1bGVjIiwiYSI6IlpEOGRJVkUifQ.SDYry6LIIHfMMpajIkFCAg'*/
+       map.addLayer({
+            'id': 'parcels',
+            'type': 'fill',
+            'source': 'someid',
+            'source-layer': 'in',
+            'paint': {
+                'fill-color': 'rgba(0,0,0,1)',
+                'fill-outline-color': 'rgba(239,140,11,0.8)',
+            }
+        }); 
+
+        /*map.addLayer({
+            'id': 'park-boundary',
+            'type': 'fill',
+            'source': 'someid',
+            'paint': {
+                'fill-color': '#888888',
+                'fill-opacity': 0.4
+            },
+            'filter': ['==', '$type', 'Polygon']
+        });*/
+
+       /*  map.addLayer({
+            'id': 'park-volcanoes',
+            'type': 'circle',
+            'source': 'someid',
+            'paint': {
+                'circle-radius': 6,
+                'circle-color': '#B42222'
+            },
+            'filter': ['==', '$type', 'Polygon']
+         });*/
+
+       /*  map.addLayer({
+            'id': 'parcels',
+            'type': 'fill',
+            'source': 'someid',
+            
+            'paint': {
+                'fill-color': 'rgba(0,0,0,0.3)',
+                'fill-outline-color': 'rgba(239,140,11,0.8)',
+            }
+        });*/
+    });
+    </script>
+
+</body>
+</html>
